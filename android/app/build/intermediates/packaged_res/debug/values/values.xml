@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#FF5722</color>
+    <color name="background">#F5F5F5</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="error">#F44336</color>
+    <color name="fuel_critical">#F44336</color>
+    <color name="fuel_good">#4CAF50</color>
+    <color name="fuel_warning">#FF9800</color>
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="success">#4CAF50</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="warning">#FF9800</color>
+    <string name="app_name">Car Fuel Monitor</string>
+    <string name="bluetooth_connect">Подключить</string>
+    <string name="bluetooth_disconnect">Отключить</string>
+    <string name="bluetooth_select_device">Выберите устройство...</string>
+    <string name="bluetooth_status">Статус: %s</string>
+    <string name="calibrate_empty">⛔ Калибровать ПУСТОЙ бак</string>
+    <string name="calibrate_full">🛢️ Калибровать ПОЛНЫЙ бак</string>
+    <string name="calibration">Калибровка</string>
+    <string name="cancel">Отмена</string>
+    <string name="confirm_reset_message">Вы уверены, что хотите сбросить всю статистику?</string>
+    <string name="confirm_reset_title">Сброс статистики</string>
+    <string name="consumption">Расход</string>
+    <string name="consumption_value">%.1f L/100km</string>
+    <string name="distance">Пробег</string>
+    <string name="distance_value">%.0f km</string>
+    <string name="fuel_level">Уровень топлива</string>
+    <string name="fuel_liters">%.1f L</string>
+    <string name="fuel_percent">%d%%</string>
+    <string name="fuel_tank_capacity">%d L</string>
+    <string name="reset_stats">🔄 Сбросить статистику</string>
+    <string name="status_connected">Подключено: %s</string>
+    <string name="status_connecting">Подключение...</string>
+    <string name="status_disconnected">Отключено</string>
+    <string name="status_error">Ошибка: %s</string>
+    <string name="toast_bluetooth_not_supported">Bluetooth не поддерживается</string>
+    <string name="toast_connected">Подключено к %s</string>
+    <string name="toast_device_not_found">Устройство не найдено</string>
+    <string name="toast_disconnected">Отключено</string>
+    <string name="toast_permissions_required">Необходимы разрешения для работы Bluetooth</string>
+    <string name="toast_select_device">Выберите устройство из списка</string>
+    <string name="total_used">Израсходовано</string>
+    <string name="total_used_value">%.1f L</string>
+    <string name="yes">Да</string>
+    <style name="Theme.CarFuelMonitor" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+</resources>

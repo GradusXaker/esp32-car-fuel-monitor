@@ -14,6 +14,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -363,7 +364,7 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_BLUETOOTH_PERMISSION) {
-            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            if (grantResults.all { perm: Int -> perm == PackageManager.PERMISSION_GRANTED }) {
                 loadPairedDevices()
             } else {
                 showToast("Необходимы разрешения для работы Bluetooth")

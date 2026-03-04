@@ -7,17 +7,15 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
 import java.io.IOException
 import java.util.*
 
@@ -34,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    // UI элементы
     private lateinit var btnConnect: Button
     private lateinit var btnDisconnect: Button
     private lateinit var btnFullCalib: Button
@@ -50,21 +47,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var deviceSpinner: Spinner
 
-    // Bluetooth
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
-    private var bluetoothDevice: BluetoothDevice? = null
     private var isConnected = false
-
-    // UUID для SPP
     private val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-
-    // Обработчики
     private val handler = Handler(Looper.getMainLooper())
     private val pairedDevices = ArrayList<String>()
     private val pairedDevicesMap = HashMap<String, BluetoothDevice>()
 
-    // Данные
     private var fuelLevel = 0f
     private var fuelLiters = 0f
     private var consumption = 0f
@@ -72,7 +62,6 @@ class MainActivity : AppCompatActivity() {
     private var totalUsed = 0f
     private var tankCapacity = 60f
 
-    // Runnable для получения данных
     private val dataRunnable = object : Runnable {
         override fun run() {
             if (isConnected) {
@@ -87,9 +76,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initViews()
-        initBluetooth()
-        setupListeners()
+        try {
+            initViews()
+            initBluetooth()
+            setupListeners()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast("Ошибка запуска: " + e.message)
+        }
     }
 
     private fun initViews() {
@@ -108,21 +102,27 @@ class MainActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         deviceSpinner = findViewById(R.id.deviceSpinner)
 
-        // Начальное состояние
         updateUIState(false)
     }
 
     @SuppressLint("MissingPermission")
     private fun initBluetooth() {
-        val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager
-        bluetoothAdapter = bluetoothManager.adapter
+        try {
+            val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as? android.bluetooth.BluetoothManager
+            bluetoothAdapter = bluetoothManager?.adapter
 
-        if (bluetoothAdapter == null) {
-            showToast("Bluetooth не поддерживается на этом устройстве")
-            return
+            if (bluetoothAdapter == null) {
+                txtStatus.text = "Bluetooth не поддерживается"
+                btnConnect.isEnabled = false
+                return
+            }
+
+            checkPermissions()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            txtStatus.text = "Ошибка Bluetooth"
+            btnConnect.isEnabled = false
         }
-
-        checkPermissions()
     }
 
     private fun checkPermissions() {
@@ -139,21 +139,27 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun loadPairedDevices() {
-        pairedDevices.clear()
-        pairedDevicesMap.clear()
-        pairedDevices.add("Выберите устройство...")
+        try {
+            pairedDevices.clear()
+            pairedDevicesMap.clear()
+            pairedDevices.add("Выберите устройство...")
 
-        val paired = bluetoothAdapter?.bondedDevices
-        if (!paired.isNullOrEmpty()) {
-            for (device in paired) {
-                pairedDevices.add(device.name ?: "Unknown")
-                pairedDevicesMap[device.name ?: "Unknown"] = device
+            val paired = bluetoothAdapter?.bondedDevices
+            if (!paired.isNullOrEmpty()) {
+                for (device in paired) {
+                    val name = device.name ?: "Unknown"
+                    pairedDevices.add(name)
+                    pairedDevicesMap[name] = device
+                }
             }
-        }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pairedDevices)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        deviceSpinner.adapter = adapter
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, pairedDevices)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            deviceSpinner.adapter = adapter
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast("Ошибка загрузки устройств")
+        }
     }
 
     private fun setupListeners() {
@@ -217,13 +223,19 @@ class MainActivity : AppCompatActivity() {
                         showToast("Подключено к $deviceName")
                         handler.postDelayed(dataRunnable, 1000)
                     }
+                } else {
+                    handler.post {
+                        txtStatus.text = "Ошибка подключения"
+                        btnConnect.isEnabled = true
+                        showToast("Не удалось подключиться")
+                    }
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
                 handler.post {
-                    txtStatus.text = "Ошибка подключения"
+                    txtStatus.text = "Ошибка: ${e.message}"
                     btnConnect.isEnabled = true
-                    showToast("Ошибка: ${e.message}")
+                    showToast("Ошибка подключения")
                 }
             }
         }.start()
@@ -239,7 +251,7 @@ class MainActivity : AppCompatActivity() {
             txtStatus.text = "Отключено"
             showToast("Отключено")
         } catch (e: IOException) {
-            showToast("Ошибка отключения: ${e.message}")
+            showToast("Ошибка отключения")
         }
     }
 
@@ -279,85 +291,50 @@ class MainActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun readData() {
-        if (!isConnected || bluetoothSocket == null) return
-
-        Thread {
-            try {
-                val inputStream = bluetoothSocket?.inputStream
-                val buffer = ByteArray(1024)
-                val bytes = inputStream?.read(buffer)
-
-                if (bytes != null && bytes > 0) {
-                    val response = String(buffer, 0, bytes).trim()
-                    parseJsonResponse(response)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }.start()
-    }
-
-    private fun parseJsonResponse(response: String) {
-        if (!response.startsWith("{") || !response.endsWith("}")) return
-
+    private fun showConfirmDialog(message: String, command: String) {
         try {
-            // Простой парсинг JSON без внешних библиотек
-            fuelLevel = extractFloat(response, "fuel_level")
-            fuelLiters = extractFloat(response, "fuel_liters")
-            consumption = extractFloat(response, "consumption")
-            distance = extractFloat(response, "distance")
-            totalUsed = extractFloat(response, "total_used")
-            tankCapacity = extractFloat(response, "tank")
-
-            handler.post {
-                updateDataUI()
-            }
+            AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("Да") { _, _ ->
+                    sendCommand(command)
+                }
+                .setNegativeButton("Отмена", null)
+                .show()
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun extractFloat(json: String, key: String): Float {
-        val pattern = "\"$key\":(\\d+\\.?\\d*)"
-        val regex = Regex(pattern)
-        val match = regex.find(json)
-        return match?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+    private fun showToast(message: String) {
+        handler.post {
+            try {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateDataUI() {
-        txtFuelLevel.text = "%.1f%%".format(fuelLevel)
-        txtFuelLiters.text = "%.1f L".format(fuelLiters)
-        txtConsumption.text = "%.1f L/100km".format(consumption)
-        txtDistance.text = "%.0f km".format(distance)
-        txtTotalUsed.text = "%.1f L".format(totalUsed)
-        txtTankCapacity.text = "%.0f L".format(tankCapacity)
+        try {
+            txtFuelLevel.text = "%.1f%%".format(fuelLevel)
+            txtFuelLiters.text = "%.1f L".format(fuelLiters)
+            txtConsumption.text = "%.1f L/100km".format(consumption)
+            txtDistance.text = "%.0f km".format(distance)
+            txtTotalUsed.text = "%.1f L".format(totalUsed)
+            txtTankCapacity.text = "%.0f L".format(tankCapacity)
 
-        progressBar.progress = fuelLevel.toInt()
+            progressBar.progress = fuelLevel.toInt()
 
-        // Цвет прогресс бара
-        val color = when {
-            fuelLevel > 50 -> ContextCompat.getColor(this, R.color.fuel_good)
-            fuelLevel > 20 -> ContextCompat.getColor(this, R.color.fuel_warning)
-            else -> ContextCompat.getColor(this, R.color.fuel_critical)
-        }
-        progressBar.progressTintList = ContextCompat.getColorStateList(this, color)
-    }
-
-    private fun showConfirmDialog(message: String, command: String) {
-        AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton("Да") { _, _ ->
-                sendCommand(command)
+            val color = when {
+                fuelLevel > 50 -> ContextCompat.getColor(this, R.color.fuel_good)
+                fuelLevel > 20 -> ContextCompat.getColor(this, R.color.fuel_warning)
+                else -> ContextCompat.getColor(this, R.color.fuel_critical)
             }
-            .setNegativeButton("Отмена", null)
-            .show()
-    }
-
-    private fun showToast(message: String) {
-        handler.post {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            progressBar.progressTintList = ContextCompat.getColorStateList(this, color)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -374,9 +351,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!bluetoothAdapter?.isEnabled!!) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        try {
+            if (bluetoothAdapter != null && !bluetoothAdapter!!.isEnabled) {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -2,7 +2,7 @@
  * Car Fuel Monitor - ESP32
  * Fuel monitoring with OLED display and Bluetooth
  * Author: GradusXaker
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 
 #include <Wire.h>
@@ -21,10 +21,8 @@
 #define SCREEN_ADDRESS 0x3C
 
 #define BT_DEVICE_NAME "CarFuelMonitor"
-
 #define EEPROM_SIZE 512
 #define EEPROM_CALIB_ADDR 0
-
 #define UPDATE_INTERVAL 1000
 #define AVG_SAMPLES 10
 
@@ -37,70 +35,15 @@ float fuelConsumption = 0;
 float distanceTraveled = 0;
 float lastFuelLevel = 0;
 float totalFuelUsed = 0;
-
 int calibFull = 4095;
 int calibEmpty = 0;
 float tankCapacity = 60;
-
 bool isCalibrating = false;
 unsigned long calibrationStart = 0;
 unsigned long lastUpdate = 0;
 bool bluetoothConnected = false;
 unsigned long simDistanceCounter = 0;
-
-void setup() {
-  Serial.begin(115200);
-  pinMode(FUEL_SENSOR_PIN, INPUT);
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
-  
-  EEPROM.begin(EEPROM_SIZE);
-  loadCalibration();
-  
-  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println("SSD1306 allocation failed");
-    for (;;);
-  }
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.clearDisplay();
-  
-  SerialBT.begin(BT_DEVICE_NAME);
-  Serial.println("Bluetooth ready: " + String(BT_DEVICE_NAME));
-  
-  display.println("Car Fuel Monitor");
-  display.println("Version 1.0.0");
-  display.println("Loading...");
-  display.display();
-  delay(2000);
-  lastUpdate = millis();
-}
-
-void loop() {
-  checkButton();
-  
-  if (millis() - lastUpdate >= UPDATE_INTERVAL) {
-    updateFuelData();
-    calculateConsumption();
-    drawDisplay();
-    sendBluetoothData();
-    lastUpdate = millis();
-  }
-  
-  if (SerialBT.available()) {
-    String cmd = SerialBT.readStringUntil('\n');
-    cmd.trim();
-    processBluetoothCommand(cmd);
-  }
-  
-  bool btState = SerialBT.hasConnected();
-  if (btState != bluetoothConnected) {
-    bluetoothConnected = btState;
-    Serial.println(btState ? "BT Connected" : "BT Disconnected");
-  }
-  delay(10);
-}
+bool displayFound = false;
 
 void loadCalibration() {
   calibFull = EEPROM.readInt(EEPROM_CALIB_ADDR);
@@ -170,13 +113,31 @@ void calculateConsumption() {
 }
 
 void drawDisplay() {
+  if (!displayFound) return;
   if (isCalibrating) {
-    drawCalibrationScreen();
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println("CALIBRATION");
+    display.println("");
+    display.print("ADC: ");
+    display.println(readFuelSensor());
+    display.print("Full: ");
+    display.println(calibFull);
+    display.print("Empty: ");
+    display.println(calibEmpty);
+    display.println("");
+    display.println("Hold button:");
+    display.println("3s = FULL");
+    display.println("5s = EMPTY");
+    display.println("7s = RESET");
+    display.print("Time: ");
+    display.print((millis() - calibrationStart) / 1000);
+    display.print("s");
+    display.display();
     return;
   }
   
   display.clearDisplay();
-  
   if (bluetoothConnected) {
     display.setCursor(0, 0);
     display.print("BT:ON");
@@ -185,50 +146,24 @@ void drawDisplay() {
   display.print(millis() / 60000);
   display.print("m");
   
-  drawFuelGauge(0, 15, fuelLevel);
+  display.drawRect(0, 15, 100, 35, SSD1306_WHITE);
+  int fillWidth = (int)((98.0 * fuelLevel) / 100.0);
+  display.fillRect(1, 16, fillWidth, 33, SSD1306_WHITE);
   
-  display.setCursor(0, 52);
-  display.printf("Cons: %.1f L/100km | Dist: %.0f km", fuelConsumption, distanceTraveled);
-  display.display();
-}
-
-void drawFuelGauge(int x, int y, float percent) {
-  display.drawRect(x, y, 100, 35, SSD1306_WHITE);
-  int fillWidth = (int)((98.0 * percent) / 100.0);
-  display.fillRect(x + 1, y + 1, fillWidth, 33, SSD1306_WHITE);
-  
-  display.setCursor(x + 105, y);
-  display.print((int)percent);
+  display.setCursor(105, 15);
+  display.print((int)fuelLevel);
   display.print("%");
   
-  display.setCursor(x + 105, y + 12);
+  display.setCursor(105, 27);
   display.print(fuelLiters, 0);
   display.print("L");
   
-  display.setCursor(x + 105, y + 24);
+  display.setCursor(105, 39);
   display.print(tankCapacity, 0);
   display.print("L");
-}
-
-void drawCalibrationScreen() {
-  display.clearDisplay();
-  display.setCursor(0, 0);
-  display.println("CALIBRATION");
-  display.println("");
-  display.print("ADC: ");
-  display.println(readFuelSensor());
-  display.print("Full: ");
-  display.println(calibFull);
-  display.print("Empty: ");
-  display.println(calibEmpty);
-  display.println("");
-  display.println("Hold button:");
-  display.println("3s = FULL");
-  display.println("5s = EMPTY");
-  display.println("7s = RESET");
-  display.print("Time: ");
-  display.print((millis() - calibrationStart) / 1000);
-  display.print("s");
+  
+  display.setCursor(0, 52);
+  display.printf("Cons: %.1f L/100km | Dist: %.0f km", fuelConsumption, distanceTraveled);
   display.display();
 }
 
@@ -320,4 +255,68 @@ void checkButton() {
       digitalWrite(LED_PIN, LOW);
     }
   }
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(FUEL_SENSOR_PIN, INPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+  
+  EEPROM.begin(EEPROM_SIZE);
+  loadCalibration();
+  
+  // Попытка инициализации OLED
+  Wire.begin(21, 22);
+  if (display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    displayFound = true;
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.clearDisplay();
+    Serial.println("OLED found");
+  } else {
+    displayFound = false;
+    Serial.println("OLED not found - continuing without display");
+  }
+  
+  SerialBT.begin(BT_DEVICE_NAME);
+  Serial.println("Bluetooth ready: " + String(BT_DEVICE_NAME));
+  
+  if (displayFound) {
+    display.println("Car Fuel Monitor");
+    display.println("Version 1.0.1");
+    display.println("BT: " + String(BT_DEVICE_NAME));
+    if (!displayFound) display.println("No OLED!");
+    display.println("Loading...");
+    display.display();
+    delay(2000);
+  }
+  
+  lastUpdate = millis();
+}
+
+void loop() {
+  checkButton();
+  
+  if (millis() - lastUpdate >= UPDATE_INTERVAL) {
+    updateFuelData();
+    calculateConsumption();
+    drawDisplay();
+    sendBluetoothData();
+    lastUpdate = millis();
+  }
+  
+  if (SerialBT.available()) {
+    String cmd = SerialBT.readStringUntil('\n');
+    cmd.trim();
+    processBluetoothCommand(cmd);
+  }
+  
+  bool btState = SerialBT.hasConnected();
+  if (btState != bluetoothConnected) {
+    bluetoothConnected = btState;
+    Serial.println(btState ? "BT Connected" : "BT Disconnected");
+  }
+  delay(10);
 }

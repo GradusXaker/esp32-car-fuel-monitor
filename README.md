@@ -150,9 +150,9 @@
 
 ### 📥 Скачать APK
 
-**Готовый APK файл:** [CarFuelMonitor-v1.0.0.apk](CarFuelMonitor-v1.0.0.apk)
+**Готовый APK файл:** [CarFuelMonitor-v1.0.2.apk](CarFuelMonitor-v1.0.2.apk)
 
-**Размер:** 5.6 MB
+**Размер:** 5.6 MB (v1.0.2)
 
 **Установка:**
 1. Скачайте APK файл на телефон

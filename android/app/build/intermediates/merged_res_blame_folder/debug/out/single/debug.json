@@ -4,8 +4,8 @@
         "source": "com.gradusxaker.carfuelmonitor.app-main-33:/mipmap-xxxhdpi/ic_launcher_round.xml"
     },
     {
-        "merged": "/root/.gradle/daemon/8.0/com.gradusxaker.carfuelmonitor.app-merged_res-31:/layout_activity_main.xml.flat",
-        "source": "/root/.gradle/daemon/8.0/com.gradusxaker.carfuelmonitor.app-main-33:/layout/activity_main.xml"
+        "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/layout_activity_main.xml.flat",
+        "source": "com.gradusxaker.carfuelmonitor.app-main-33:/layout/activity_main.xml"
     },
     {
         "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/mipmap-xxhdpi_ic_launcher.xml.flat",
@@ -24,6 +24,10 @@
         "source": "com.gradusxaker.carfuelmonitor.app-main-33:/mipmap-hdpi/ic_launcher_round.xml"
     },
     {
+        "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/drawable_progress_bar_colors.xml.flat",
+        "source": "com.gradusxaker.carfuelmonitor.app-main-33:/drawable/progress_bar_colors.xml"
+    },
+    {
         "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/mipmap-xxhdpi_ic_launcher_round.xml.flat",
         "source": "com.gradusxaker.carfuelmonitor.app-main-33:/mipmap-xxhdpi/ic_launcher_round.xml"
     },
@@ -38,10 +42,6 @@
     {
         "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/mipmap-xhdpi_ic_launcher.xml.flat",
         "source": "com.gradusxaker.carfuelmonitor.app-main-33:/mipmap-xhdpi/ic_launcher.xml"
-    },
-    {
-        "merged": "/root/.gradle/daemon/8.0/com.gradusxaker.carfuelmonitor.app-merged_res-31:/drawable_progress_bar_colors.xml.flat",
-        "source": "/root/.gradle/daemon/8.0/com.gradusxaker.carfuelmonitor.app-main-33:/drawable/progress_bar_colors.xml"
     },
     {
         "merged": "com.gradusxaker.carfuelmonitor.app-merged_res-31:/mipmap-xhdpi_ic_launcher_round.xml.flat",

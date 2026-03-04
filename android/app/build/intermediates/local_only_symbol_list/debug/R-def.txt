@@ -12,6 +12,7 @@ color primary
 color primary_dark
 color primary_light
 color success
+color surface
 color text_primary
 color text_secondary
 color warning

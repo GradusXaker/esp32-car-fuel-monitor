@@ -11,24 +11,23 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Заголовок -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Car Fuel Monitor"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/primary"
+            android:textColor="@color/text_primary"
             android:gravity="center"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Bluetooth подключение -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,8 +62,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Подключить"
-                        android:backgroundTint="@color/primary"/>
+                        android:text="Подключить"/>
 
                     <Button
                         android:id="@+id/btnDisconnect"
@@ -72,8 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Отключить"
-                        android:layout_marginStart="8dp"
-                        android:backgroundTint="@color/error"/>
+                        android:layout_marginStart="8dp"/>
                 </LinearLayout>
 
                 <TextView
@@ -88,13 +85,13 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Уровень топлива -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,7 +107,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"/>
 
-                <!-- Прогресс бар -->
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -141,7 +137,7 @@
                             android:text="0%"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primary"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -165,7 +161,7 @@
                             android:text="0 L"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primary"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -202,13 +198,13 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Расход и статистика -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -268,7 +264,7 @@
                             android:text="0 km"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primary"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -311,12 +307,12 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Калибровка -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -345,8 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="🛢️ Калибровать ПОЛНЫЙ бак"
-                    android:backgroundTint="@color/success"/>
+                    android:text="🛢️ Калибровать ПОЛНЫЙ бак"/>
 
                 <Button
                     android:id="@+id/btnEmptyCalib"
@@ -354,7 +349,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="⛔ Калибровать ПУСТОЙ бак"
-                    android:backgroundTint="@color/warning"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
                 <Button
@@ -363,12 +357,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="🔄 Сбросить статистику"
-                    android:backgroundTint="@color/error"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Подсказка -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -20,14 +20,17 @@ drawable progress_bar_colors
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
+id btnHalfCalib
 id btnResetStats
 id btnScan
 id deviceSpinner
 id progressBar
+id txtAvgConsumption
 id txtConsumption
 id txtDistance
 id txtFuelLevel
 id txtFuelLiters
+id txtRange
 id txtStatus
 id txtTankCapacity
 id txtTotalUsed

@@ -3164,6 +3164,7 @@ id bounceStart
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
+id btnHalfCalib
 id btnResetStats
 id btnScan
 id buttonPanel
@@ -3543,10 +3544,12 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id txtAvgConsumption
 id txtConsumption
 id txtDistance
 id txtFuelLevel
 id txtFuelLiters
+id txtRange
 id txtStatus
 id txtTankCapacity
 id txtTotalUsed

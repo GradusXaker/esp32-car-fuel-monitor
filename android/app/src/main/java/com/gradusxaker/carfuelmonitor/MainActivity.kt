@@ -64,6 +64,8 @@ class MainActivity : AppCompatActivity() {
     private var distance = 0f
     private var totalUsed = 0f
     private var tankCapacity = 60f
+    private var rangeKm = 0f
+    private var avgConsumption = 0f
 
     private val dataRunnable = object : Runnable {
         override fun run() {
@@ -112,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnFullCalib = findViewById(R.id.btnFullCalib)
         btnEmptyCalib = findViewById(R.id.btnEmptyCalib)
+        btnHalfCalib = findViewById(R.id.btnHalfCalib)
         btnResetStats = findViewById(R.id.btnResetStats)
         txtStatus = findViewById(R.id.txtStatus)
         txtFuelLevel = findViewById(R.id.txtFuelLevel)
@@ -294,6 +297,10 @@ class MainActivity : AppCompatActivity() {
 
         btnFullCalib.setOnClickListener {
             sendCommand("SET_FULL")
+        }
+
+        btnHalfCalib.setOnClickListener {
+            sendCommand("SET_HALF")
         }
 
         btnEmptyCalib.setOnClickListener {

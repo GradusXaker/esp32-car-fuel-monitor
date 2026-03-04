@@ -16,7 +16,9 @@ color surface
 color text_primary
 color text_secondary
 color warning
+drawable ic_splash_car
 drawable progress_bar_colors
+drawable splash_background
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
@@ -24,6 +26,7 @@ id btnHalfCalib
 id btnResetStats
 id btnScan
 id deviceSpinner
+id imgCar
 id progressBar
 id txtAvgConsumption
 id txtConsumption
@@ -32,9 +35,13 @@ id txtFuelLevel
 id txtFuelLiters
 id txtRange
 id txtStatus
+id txtSubtitle
 id txtTankCapacity
+id txtTitle
 id txtTotalUsed
+id txtVersion
 layout activity_main
+layout activity_splash
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name

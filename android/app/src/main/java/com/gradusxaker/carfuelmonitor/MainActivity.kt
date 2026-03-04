@@ -114,7 +114,6 @@ class MainActivity : AppCompatActivity() {
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnFullCalib = findViewById(R.id.btnFullCalib)
         btnEmptyCalib = findViewById(R.id.btnEmptyCalib)
-        btnHalfCalib = findViewById(R.id.btnHalfCalib)
         btnResetStats = findViewById(R.id.btnResetStats)
         txtStatus = findViewById(R.id.txtStatus)
         txtFuelLevel = findViewById(R.id.txtFuelLevel)
@@ -299,8 +298,6 @@ class MainActivity : AppCompatActivity() {
             sendCommand("SET_FULL")
         }
 
-        btnHalfCalib.setOnClickListener {
-            sendCommand("SET_HALF")
         }
 
         btnEmptyCalib.setOnClickListener {

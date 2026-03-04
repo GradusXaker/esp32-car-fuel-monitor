@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-40:12
-INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-40:12
-INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-40:12
-INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-40:12
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-42:12
+INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:1-42:12
 MERGED from [androidx.databinding:viewbinding:8.1.0] /root/.gradle/caches/transforms-3/1da3ff712662cd62d9e61743ebe663f9/transformed/viewbinding-8.1.0/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.10.0] /root/.gradle/caches/transforms-3/61e17ca8228843b0b95b73d5a3a2d014/transformed/material-1.10.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /root/.gradle/caches/transforms-3/6de17af1fafef4018d975c87f851457b/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -57,40 +57,40 @@ MERGED from [androidx.annotation:annotation-experimental:1.3.0] /root/.gradle/ca
 	xmlns:android
 		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:2:11-69
 uses-permission#android.permission.BLUETOOTH_SCAN
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:6:5-8:31
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:5:5-7:31
 	android:usesPermissionFlags
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:7:9-55
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:6:9-55
 	tools:targetApi
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:8:9-28
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:7:9-28
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:6:22-70
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:5:22-70
 uses-permission#android.permission.BLUETOOTH_CONNECT
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:9:5-76
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:8:5-76
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:9:22-73
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:8:22-73
 uses-permission#android.permission.BLUETOOTH
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:12:5-95
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:9:5-95
 	android:maxSdkVersion
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:12:66-92
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:9:66-92
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:12:22-65
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:9:22-65
 uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:13:5-101
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:10:5-101
 	android:maxSdkVersion
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:13:72-98
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:10:72-98
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:13:22-71
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:10:22-71
 uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:16:5-79
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:11:5-79
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:16:22-76
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:11:22-76
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:17:5-81
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:12:5-81
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:17:22-78
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:12:22-78
 application
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:19:5-38:19
-INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:19:5-38:19
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:14:5-40:19
+INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml:14:5-40:19
 MERGED from [com.google.android.material:material:1.10.0] /root/.gradle/caches/transforms-3/61e17ca8228843b0b95b73d5a3a2d014/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.10.0] /root/.gradle/caches/transforms-3/61e17ca8228843b0b95b73d5a3a2d014/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /root/.gradle/caches/transforms-3/6de17af1fafef4018d975c87f851457b/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -112,37 +112,45 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /root/.gradle/caches/transf
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] /root/.gradle/caches/transforms-3/a02af45ee381eb3587200483e4a20c77/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:24:9-35
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:19:9-35
 	android:label
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:22:9-41
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:17:9-41
 	android:roundIcon
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:23:9-54
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:18:9-54
 	android:icon
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:21:9-43
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:16:9-43
 	android:allowBackup
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:20:9-35
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:15:9-35
 	android:theme
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:25:9-52
-activity#com.gradusxaker.carfuelmonitor.MainActivity
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:27:9-36:20
-	android:label
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:30:13-45
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:20:9-52
+activity#com.gradusxaker.carfuelmonitor.SplashActivity
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:23:9-31:20
 	android:exported
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:29:13-36
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:25:13-36
 	android:theme
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:31:13-56
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:26:13-56
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:28:13-41
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:24:13-43
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:32:13-35:29
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:27:13-30:29
 action#android.intent.action.MAIN
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:33:17-69
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:28:17-69
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:33:25-66
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:28:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:34:17-77
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:29:17-77
 	android:name
-		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:34:27-74
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:29:27-74
+activity#com.gradusxaker.carfuelmonitor.MainActivity
+ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:34:9-38:58
+	android:label
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:37:13-45
+	android:exported
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:36:13-37
+	android:theme
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:38:13-56
+	android:name
+		ADDED from /root/esp32/android/app/src/main/AndroidManifest.xml:35:13-41
 uses-sdk
 INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /root/esp32/android/app/src/main/AndroidManifest.xml

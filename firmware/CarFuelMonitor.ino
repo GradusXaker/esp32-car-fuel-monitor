@@ -372,7 +372,7 @@ void loop() {
   }
   
   // Отслеживание подключения Bluetooth
-  bool btState = SerialBT.hasConnected();
+  bool btState = SerialBT.connected();
   if (btState != bluetoothConnected) {
     bluetoothConnected = btState;
     if (btState) {

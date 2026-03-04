@@ -68,7 +68,7 @@ bool displayFound = false;
 void loadFromEEPROM() {
   // Проверка валидности данных
   if (EEPROM.readByte(EEPROM_MAGIC) != EEPROM_MAGIC_VALUE) {
-    Serial.println("EEPROM empty, using defaults");
+    Serial.println(F("EEPROM empty"));
     return;
   }
   
@@ -87,11 +87,11 @@ void loadFromEEPROM() {
   if (fuelLevel < 0 || fuelLevel > 100) fuelLevel = 0;
   
   Serial.println("EEPROM loaded:");
-  Serial.println("  Full: " + String(calibFull));
-  Serial.println("  Empty: " + String(calibEmpty));
-  Serial.println("  Tank: " + String(tankCapacity) + "L");
-  Serial.println("  Fuel: " + String(fuelLevel, 1) + "%");
-  Serial.println("  Distance: " + String(distanceTraveled, 0) + "km");
+  Serial.print("  Full: "); Serial.println(calibFull);
+  Serial.print("  Empty: "); Serial.println(calibEmpty);
+  Serial.print("  Tank: "); Serial.print(tankCapacity); Serial.println("L");
+  Serial.print("  Fuel: "); Serial.print(fuelLevel, 1); Serial.println("%");
+  Serial.print("  Distance: "); Serial.print(distanceTraveled, 0); Serial.println("km");
 }
 
 // Сохранение в EEPROM
@@ -106,7 +106,7 @@ void saveToEEPROM() {
   EEPROM.writeULong(EEPROM_LAST_SAVE, millis() / 1000);
   EEPROM.commit();
   
-  Serial.println("Data saved to EEPROM");
+  Serial.println(F("EEPROM saved"));
 }
 
 // Чтение датчика
@@ -165,11 +165,11 @@ void updateFuelData() {
     if (lastFuelLevel > fuelLevel + 2.0) {  // +2% гистерезис
       float usedLiters = ((lastFuelLevel - fuelLevel) / 100.0) * tankCapacity;
       totalFuelUsed += usedLiters;
-      Serial.println("Fuel used: " + String(usedLiters, 2) + "L");
+      Serial.print("Fuel used: "); Serial.print(usedLiters, 2); Serial.println("L");
     }
     // Если уровень вырос - это заправка
     else if (fuelLevel > lastFuelLevel + 5.0) {  // +5% считаем заправкой
-      Serial.println("REFUEL DETECTED: " + String(fuelLevel - lastFuelLevel, 1) + "%");
+      Serial.print("REFUEL: "); Serial.println(fuelLevel - lastFuelLevel, 1);
       // Не сбрасываем totalFuelUsed, сохраняем историю
     }
   }
@@ -362,7 +362,7 @@ void checkButton() {
         calibFull = readFuelSensor();
         fuelLevel = 100;
         saveToEEPROM();
-        Serial.println("FULL TANK calibrated");
+        Serial.println(F("FULL calibrated"));
       }
     }
     // 3 секунды - ПОЛ БАКА
@@ -372,7 +372,7 @@ void checkButton() {
         calibEmpty = adcHalf - (calibFull - adcHalf);
         fuelLevel = 50;
         saveToEEPROM();
-        Serial.println("HALF TANK calibrated");
+        Serial.println(F("HALF calibrated"));
       }
     }
     // 5 секунд - ПУСТОЙ БАК
@@ -381,7 +381,7 @@ void checkButton() {
         calibEmpty = readFuelSensor();
         fuelLevel = 0;
         saveToEEPROM();
-        Serial.println("EMPTY TANK calibrated");
+        Serial.println(F("EMPTY calibrated"));
       }
     }
     // 7 секунд - СБРОС
@@ -392,7 +392,7 @@ void checkButton() {
         distanceTraveled = 0;
         totalFuelUsed = 0;
         saveToEEPROM();
-        Serial.println("RESET ALL");
+        Serial.println(F("RESET"));
       }
     }
   } else {
@@ -423,14 +423,14 @@ void setup() {
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
     display.clearDisplay();
-    Serial.println("OLED found");
+    Serial.println(F("OLED OK"));
   } else {
     displayFound = false;
-    Serial.println("OLED NOT found");
+    Serial.println(F("OLED NOT FOUND"));
   }
   
   SerialBT.begin(BT_DEVICE_NAME);
-  Serial.println("Bluetooth: " + BT_DEVICE_NAME);
+  Serial.print(F("BT: ")); Serial.println(BT_DEVICE_NAME);
   
   if (displayFound) {
     display.println("Car Fuel Monitor");
@@ -473,7 +473,7 @@ void loop() {
   bool btState = SerialBT.connected();
   if (btState != bluetoothConnected) {
     bluetoothConnected = btState;
-    Serial.println(btState ? "BT Connected" : "BT Disconnected");
+    Serial.println(btState ? F("BT Connected") : F("BT Disconnected"));
   }
   
   delay(10);

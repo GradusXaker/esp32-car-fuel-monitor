@@ -3161,11 +3161,11 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
-id btnConnect
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
 id btnResetStats
+id btnScan
 id buttonPanel
 id cache_measures
 id callMeasure

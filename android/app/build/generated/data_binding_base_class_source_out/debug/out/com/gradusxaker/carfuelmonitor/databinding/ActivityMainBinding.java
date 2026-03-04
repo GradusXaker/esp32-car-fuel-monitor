@@ -23,9 +23,6 @@ public final class ActivityMainBinding implements ViewBinding {
   private final ScrollView rootView;
 
   @NonNull
-  public final Button btnConnect;
-
-  @NonNull
   public final Button btnDisconnect;
 
   @NonNull
@@ -36,6 +33,9 @@ public final class ActivityMainBinding implements ViewBinding {
 
   @NonNull
   public final Button btnResetStats;
+
+  @NonNull
+  public final Button btnScan;
 
   @NonNull
   public final Spinner deviceSpinner;
@@ -64,19 +64,18 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final TextView txtTotalUsed;
 
-  private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull Button btnConnect,
-      @NonNull Button btnDisconnect, @NonNull Button btnEmptyCalib, @NonNull Button btnFullCalib,
-      @NonNull Button btnResetStats, @NonNull Spinner deviceSpinner,
-      @NonNull ProgressBar progressBar, @NonNull TextView txtConsumption,
-      @NonNull TextView txtDistance, @NonNull TextView txtFuelLevel,
-      @NonNull TextView txtFuelLiters, @NonNull TextView txtStatus,
+  private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull Button btnDisconnect,
+      @NonNull Button btnEmptyCalib, @NonNull Button btnFullCalib, @NonNull Button btnResetStats,
+      @NonNull Button btnScan, @NonNull Spinner deviceSpinner, @NonNull ProgressBar progressBar,
+      @NonNull TextView txtConsumption, @NonNull TextView txtDistance,
+      @NonNull TextView txtFuelLevel, @NonNull TextView txtFuelLiters, @NonNull TextView txtStatus,
       @NonNull TextView txtTankCapacity, @NonNull TextView txtTotalUsed) {
     this.rootView = rootView;
-    this.btnConnect = btnConnect;
     this.btnDisconnect = btnDisconnect;
     this.btnEmptyCalib = btnEmptyCalib;
     this.btnFullCalib = btnFullCalib;
     this.btnResetStats = btnResetStats;
+    this.btnScan = btnScan;
     this.deviceSpinner = deviceSpinner;
     this.progressBar = progressBar;
     this.txtConsumption = txtConsumption;
@@ -115,12 +114,6 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.btnConnect;
-      Button btnConnect = ViewBindings.findChildViewById(rootView, id);
-      if (btnConnect == null) {
-        break missingId;
-      }
-
       id = R.id.btnDisconnect;
       Button btnDisconnect = ViewBindings.findChildViewById(rootView, id);
       if (btnDisconnect == null) {
@@ -142,6 +135,12 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.btnResetStats;
       Button btnResetStats = ViewBindings.findChildViewById(rootView, id);
       if (btnResetStats == null) {
+        break missingId;
+      }
+
+      id = R.id.btnScan;
+      Button btnScan = ViewBindings.findChildViewById(rootView, id);
+      if (btnScan == null) {
         break missingId;
       }
 
@@ -199,8 +198,8 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((ScrollView) rootView, btnConnect, btnDisconnect,
-          btnEmptyCalib, btnFullCalib, btnResetStats, deviceSpinner, progressBar, txtConsumption,
+      return new ActivityMainBinding((ScrollView) rootView, btnDisconnect, btnEmptyCalib,
+          btnFullCalib, btnResetStats, btnScan, deviceSpinner, progressBar, txtConsumption,
           txtDistance, txtFuelLevel, txtFuelLiters, txtStatus, txtTankCapacity, txtTotalUsed);
     }
     String missingId = rootView.getResources().getResourceName(id);

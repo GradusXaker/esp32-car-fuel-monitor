@@ -17,11 +17,11 @@ color text_primary
 color text_secondary
 color warning
 drawable progress_bar_colors
-id btnConnect
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
 id btnResetStats
+id btnScan
 id deviceSpinner
 id progressBar
 id txtConsumption

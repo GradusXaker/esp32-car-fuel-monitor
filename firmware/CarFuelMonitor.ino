@@ -465,7 +465,7 @@ void loop() {
   if (SerialBT.available()) {
     String cmd = SerialBT.readStringUntil('\n');
     cmd.trim();
-    if (cmd.length() > 0) {
+    if (cmd.startsWith("SPEED:")) { processSpeedCommand(cmd); } else if (cmd.length() > 0) {
       processBluetoothCommand(cmd);
     }
   }
@@ -477,4 +477,14 @@ void loop() {
   }
   
   delay(10);
+}
+
+// Обработка скорости от телефона
+float phoneSpeed = 0;
+
+void processSpeedCommand(String cmd) {
+  if (cmd.startsWith("SPEED:")) {
+    phoneSpeed = cmd.substring(6).toFloat();
+    Serial.println("Phone speed: " + String(phoneSpeed) + " km/h");
+  }
 }

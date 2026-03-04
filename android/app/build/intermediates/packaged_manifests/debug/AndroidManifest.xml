@@ -8,6 +8,7 @@
         android:minSdkVersion="24"
         android:targetSdkVersion="34" />
 
+    <!-- Bluetooth -->
     <uses-permission
         android:name="android.permission.BLUETOOTH_SCAN"
         android:usesPermissionFlags="neverForLocation" />
@@ -18,8 +19,11 @@
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
+
+    <!-- GPS / Location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <permission
         android:name="com.gradusxaker.carfuelmonitor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -37,8 +41,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CarFuelMonitor" >
-
-        <!-- Splash Screen - главный экран -->
         <activity
             android:name="com.gradusxaker.carfuelmonitor.SplashActivity"
             android:exported="true"
@@ -49,8 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Основной экран -->
         <activity
             android:name="com.gradusxaker.carfuelmonitor.MainActivity"
             android:exported="false"

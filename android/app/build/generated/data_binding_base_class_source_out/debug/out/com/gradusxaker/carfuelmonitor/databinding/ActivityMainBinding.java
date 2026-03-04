@@ -32,7 +32,7 @@ public final class ActivityMainBinding implements ViewBinding {
   public final Button btnFullCalib;
 
   @NonNull
-  public final Button btnHalfCalib;
+  public final Button btnResetGPS;
 
   @NonNull
   public final Button btnResetStats;
@@ -53,16 +53,22 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView txtConsumption;
 
   @NonNull
-  public final TextView txtDistance;
-
-  @NonNull
   public final TextView txtFuelLevel;
 
   @NonNull
   public final TextView txtFuelLiters;
 
   @NonNull
+  public final TextView txtGPSDistance;
+
+  @NonNull
+  public final TextView txtGPSStatus;
+
+  @NonNull
   public final TextView txtRange;
+
+  @NonNull
+  public final TextView txtSpeed;
 
   @NonNull
   public final TextView txtStatus;
@@ -73,32 +79,39 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final TextView txtTotalUsed;
 
+  @NonNull
+  public final TextView txtTripDistance;
+
   private ActivityMainBinding(@NonNull ScrollView rootView, @NonNull Button btnDisconnect,
-      @NonNull Button btnEmptyCalib, @NonNull Button btnFullCalib, @NonNull Button btnHalfCalib,
+      @NonNull Button btnEmptyCalib, @NonNull Button btnFullCalib, @NonNull Button btnResetGPS,
       @NonNull Button btnResetStats, @NonNull Button btnScan, @NonNull Spinner deviceSpinner,
       @NonNull ProgressBar progressBar, @NonNull TextView txtAvgConsumption,
-      @NonNull TextView txtConsumption, @NonNull TextView txtDistance,
-      @NonNull TextView txtFuelLevel, @NonNull TextView txtFuelLiters, @NonNull TextView txtRange,
+      @NonNull TextView txtConsumption, @NonNull TextView txtFuelLevel,
+      @NonNull TextView txtFuelLiters, @NonNull TextView txtGPSDistance,
+      @NonNull TextView txtGPSStatus, @NonNull TextView txtRange, @NonNull TextView txtSpeed,
       @NonNull TextView txtStatus, @NonNull TextView txtTankCapacity,
-      @NonNull TextView txtTotalUsed) {
+      @NonNull TextView txtTotalUsed, @NonNull TextView txtTripDistance) {
     this.rootView = rootView;
     this.btnDisconnect = btnDisconnect;
     this.btnEmptyCalib = btnEmptyCalib;
     this.btnFullCalib = btnFullCalib;
-    this.btnHalfCalib = btnHalfCalib;
+    this.btnResetGPS = btnResetGPS;
     this.btnResetStats = btnResetStats;
     this.btnScan = btnScan;
     this.deviceSpinner = deviceSpinner;
     this.progressBar = progressBar;
     this.txtAvgConsumption = txtAvgConsumption;
     this.txtConsumption = txtConsumption;
-    this.txtDistance = txtDistance;
     this.txtFuelLevel = txtFuelLevel;
     this.txtFuelLiters = txtFuelLiters;
+    this.txtGPSDistance = txtGPSDistance;
+    this.txtGPSStatus = txtGPSStatus;
     this.txtRange = txtRange;
+    this.txtSpeed = txtSpeed;
     this.txtStatus = txtStatus;
     this.txtTankCapacity = txtTankCapacity;
     this.txtTotalUsed = txtTotalUsed;
+    this.txtTripDistance = txtTripDistance;
   }
 
   @Override
@@ -146,9 +159,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.btnHalfCalib;
-      Button btnHalfCalib = ViewBindings.findChildViewById(rootView, id);
-      if (btnHalfCalib == null) {
+      id = R.id.btnResetGPS;
+      Button btnResetGPS = ViewBindings.findChildViewById(rootView, id);
+      if (btnResetGPS == null) {
         break missingId;
       }
 
@@ -188,12 +201,6 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.txtDistance;
-      TextView txtDistance = ViewBindings.findChildViewById(rootView, id);
-      if (txtDistance == null) {
-        break missingId;
-      }
-
       id = R.id.txtFuelLevel;
       TextView txtFuelLevel = ViewBindings.findChildViewById(rootView, id);
       if (txtFuelLevel == null) {
@@ -206,9 +213,27 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.txtGPSDistance;
+      TextView txtGPSDistance = ViewBindings.findChildViewById(rootView, id);
+      if (txtGPSDistance == null) {
+        break missingId;
+      }
+
+      id = R.id.txtGPSStatus;
+      TextView txtGPSStatus = ViewBindings.findChildViewById(rootView, id);
+      if (txtGPSStatus == null) {
+        break missingId;
+      }
+
       id = R.id.txtRange;
       TextView txtRange = ViewBindings.findChildViewById(rootView, id);
       if (txtRange == null) {
+        break missingId;
+      }
+
+      id = R.id.txtSpeed;
+      TextView txtSpeed = ViewBindings.findChildViewById(rootView, id);
+      if (txtSpeed == null) {
         break missingId;
       }
 
@@ -230,10 +255,17 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.txtTripDistance;
+      TextView txtTripDistance = ViewBindings.findChildViewById(rootView, id);
+      if (txtTripDistance == null) {
+        break missingId;
+      }
+
       return new ActivityMainBinding((ScrollView) rootView, btnDisconnect, btnEmptyCalib,
-          btnFullCalib, btnHalfCalib, btnResetStats, btnScan, deviceSpinner, progressBar,
-          txtAvgConsumption, txtConsumption, txtDistance, txtFuelLevel, txtFuelLiters, txtRange,
-          txtStatus, txtTankCapacity, txtTotalUsed);
+          btnFullCalib, btnResetGPS, btnResetStats, btnScan, deviceSpinner, progressBar,
+          txtAvgConsumption, txtConsumption, txtFuelLevel, txtFuelLiters, txtGPSDistance,
+          txtGPSStatus, txtRange, txtSpeed, txtStatus, txtTankCapacity, txtTotalUsed,
+          txtTripDistance);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,6 +1,7 @@
 R_DEF: Internal format may change without notice
 local
 color accent
+color accent_light
 color background
 color card_background
 color divider
@@ -10,9 +11,12 @@ color fuel_good
 color fuel_warning
 color primary
 color primary_dark
-color primary_light
+color speed_high
+color speed_low
+color speed_medium
 color success
 color surface
+color text_gold
 color text_primary
 color text_secondary
 color warning
@@ -22,7 +26,7 @@ drawable splash_background
 id btnDisconnect
 id btnEmptyCalib
 id btnFullCalib
-id btnHalfCalib
+id btnResetGPS
 id btnResetStats
 id btnScan
 id deviceSpinner
@@ -30,15 +34,18 @@ id imgCar
 id progressBar
 id txtAvgConsumption
 id txtConsumption
-id txtDistance
 id txtFuelLevel
 id txtFuelLiters
+id txtGPSDistance
+id txtGPSStatus
 id txtRange
+id txtSpeed
 id txtStatus
 id txtSubtitle
 id txtTankCapacity
 id txtTitle
 id txtTotalUsed
+id txtTripDistance
 id txtVersion
 layout activity_main
 layout activity_splash

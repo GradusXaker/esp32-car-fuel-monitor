@@ -2,14 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" 
         android:usesPermissionFlags="neverForLocation" 
         tools:targetApi="s" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    
+    <!-- GPS / Location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarFuelMonitor">
         
-        <!-- Splash Screen - главный экран -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -30,7 +33,6 @@
             </intent-filter>
         </activity>
         
-        <!-- Основной экран -->
         <activity
             android:name=".MainActivity"
             android:exported="false"

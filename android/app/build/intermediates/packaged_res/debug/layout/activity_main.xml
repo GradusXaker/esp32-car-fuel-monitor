@@ -11,23 +11,34 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Заголовок Bentley -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Car Fuel Monitor"
-            android:textSize="24sp"
+            android:text="BENTLEY"
+            android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/accent"
+            android:gravity="center"
+            android:letterSpacing="0.3"
+            android:layout_marginBottom="8dp"/>
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fuel Monitor"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
             android:gravity="center"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Bluetooth -->
+        <!-- Bluetooth Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
@@ -39,7 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bluetooth"
+                    android:text="📶 Bluetooth"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"/>
@@ -48,7 +59,7 @@
                     android:id="@+id/btnScan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:text="🔍 Поиск устройств"/>
 
                 <Spinner
@@ -78,12 +89,68 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Спидометр -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:strokeColor="@color/accent"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🚀 СКОРОСТЬ"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:letterSpacing="0.2"/>
+
+                <TextView
+                    android:id="@+id/txtSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="72sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="км/ч"
+                    android:textSize="18sp"
+                    android:textColor="@color/text_secondary"/>
+
+                <!-- GPS статус -->
+                <TextView
+                    android:id="@+id/txtGPSStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📡 GPS: Поиск спутников..."
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Запас хода -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="@color/card_background">
 
@@ -91,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="20dp"
                 android:gravity="center">
 
                 <TextView
@@ -108,7 +175,8 @@
                     android:text="0 км"
                     android:textSize="48sp"
                     android:textStyle="bold"
-                    android:textColor="@color/success"/>
+                    android:textColor="@color/success"
+                    android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -119,25 +187,104 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Топливо -->
+        <!-- GPS Пробег -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Топливо в баке"
+                    android:text="🛣️ Пробег (GPS)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtGPSDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="км"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/txtTripDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="за поездку (км)"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Топливо -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/card_background">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⛽ Топливо"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"/>
@@ -146,7 +293,7 @@
                     android:id="@+id/progressBar"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="24dp"
                     android:layout_marginTop="16dp"
                     android:max="100"
                     android:progress="0"
@@ -170,9 +317,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0%"
-                            android:textSize="24sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
+                            android:textColor="@color/accent"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -194,7 +341,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 L"
-                            android:textSize="24sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -218,7 +365,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="60 L"
-                            android:textSize="24sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -238,20 +385,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Расход топлива"
+                    android:text="📊 Расход топлива"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"/>
@@ -274,7 +421,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 L/100km"
-                            android:textSize="20sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/warning"/>
 
@@ -298,7 +445,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 L/100km"
-                            android:textSize="20sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -315,8 +462,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/divider"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -330,35 +477,11 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/txtDistance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 km"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Пробег"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="end">
-
-                        <TextView
                             android:id="@+id/txtTotalUsed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 L"
-                            android:textSize="20sp"
+                            android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -377,28 +500,28 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/card_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Калибровка бака"
+                    android:text="⚙️ Калибровка"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary"/>
+                    android:textColor="@color/accent"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Нажмите кнопку при соответствующем уровне топлива"
+                    android:text="Нажмите при соответствующем уровне топлива"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -412,14 +535,6 @@
                     android:enabled="false"/>
 
                 <Button
-                    android:id="@+id/btnHalfCalib"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="⛽ ПОЛ БАКА (50%)"
-                    android:enabled="false"/>
-
-                <Button
                     android:id="@+id/btnEmptyCalib"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -428,11 +543,19 @@
                     android:enabled="false"/>
 
                 <Button
+                    android:id="@+id/btnResetGPS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="📍 Сброс GPS пробега"
+                    android:enabled="false"/>
+
+                <Button
                     android:id="@+id/btnResetStats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="🔄 Сброс статистики"
+                    android:text="🔄 Сброс всей статистики"
                     android:enabled="false"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

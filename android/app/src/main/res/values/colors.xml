@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Bentley Colors -->
-    <color name="primary">#000000</color>
-    <color name="primary_dark">#0a0a0a</color>
-    <color name="accent">#FFD700</color>
-    <color name="accent_light">#FFE033</color>
-    
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FF9800</color>
-    <color name="error">#F44336</color>
-    
-    <color name="background">#000000</color>
-    <color name="surface">#1a1a1a</color>
-    <color name="card_background">#0d0d0d</color>
-    
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B0B0B0</color>
-    <color name="text_gold">#FFD700</color>
-    
-    <color name="divider">#333333</color>
-    
-    <color name="fuel_good">#4CAF50</color>
-    <color name="fuel_warning">#FF9800</color>
-    <color name="fuel_critical">#F44336</color>
-    
-    <!-- Speed colors -->
-    <color name="speed_low">#4CAF50</color>
-    <color name="speed_medium">#FF9800</color>
-    <color name="speed_high">#F44336</color>
+    <color name="primary">#0B2238</color>
+    <color name="primary_dark">#071728</color>
+    <color name="accent">#F5B441</color>
+    <color name="accent_light">#FFD487</color>
+
+    <color name="success">#35C98D</color>
+    <color name="warning">#FF9B42</color>
+    <color name="error">#E94E4E</color>
+
+    <color name="background">#07101C</color>
+    <color name="surface">#12273B</color>
+    <color name="card_background">#162F47</color>
+    <color name="card_overlay">#22445F</color>
+    <color name="chip_background">#264B68</color>
+
+    <color name="text_primary">#F2F7FC</color>
+    <color name="text_secondary">#B2C6D8</color>
+    <color name="text_gold">#F9A826</color>
+
+    <color name="divider">#32516E</color>
+
+    <color name="fuel_good">#35C98D</color>
+    <color name="fuel_warning">#FF9B42</color>
+    <color name="fuel_critical">#E94E4E</color>
+
+    <color name="speed_low">#35C98D</color>
+    <color name="speed_medium">#FF9B42</color>
+    <color name="speed_high">#E94E4E</color>
 </resources>

@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
@@ -35,7 +36,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
     companion object {
         private const val TAG = "MainActivity"
         private const val REQUEST_PERMISSIONS = 1
-        private const val REQUEST_ENABLE_BT = 2
         private const val MIN_DISTANCE_CHANGE = 1f
         private const val MIN_TIME_UPDATE = 1000L
     }
@@ -87,6 +87,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private var totalUsed = 0f
     private var tankCapacity = 60f
 
+    private val enableBluetoothLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            registerBluetoothReceiverIfNeeded()
+            setupListeners()
+            startDiscovery()
+        } else {
+            txtStatus.text = "BT выключен"
+        }
+    }
+
     private fun hasBluetoothConnectPermission(): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
@@ -108,6 +118,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    @Suppress("DEPRECATION")
+    private fun getBluetoothDeviceExtra(intent: Intent?): BluetoothDevice? {
+        if (intent == null) return null
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java)
+        } else {
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+        }
+    }
+
     private val dataRunnable = object : Runnable {
         override fun run() {
             if (isConnected) { sendCommand("GET_STATUS"); handler.postDelayed(this, 2000) }
@@ -118,7 +138,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    val device = getBluetoothDeviceExtra(intent)
                     if (device != null && hasBluetoothConnectPermission() && getDeviceNameSafe(device) != null) addDevice(device)
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
@@ -229,7 +249,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
             val bm = getSystemService(BLUETOOTH_SERVICE) as? android.bluetooth.BluetoothManager
             bluetoothAdapter = bm?.adapter
             if (bluetoothAdapter == null) { txtStatus.text = "BT не поддерживается"; return }
-            if (!bluetoothAdapter!!.isEnabled) { startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT) }
+            if (!bluetoothAdapter!!.isEnabled) {
+                enableBluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+            }
             else {
                 registerBluetoothReceiverIfNeeded()
                 setupListeners()
@@ -280,17 +302,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         lastLocation = location
         val sats = location.extras?.getInt("satellites") ?: 0
         txtGPSStatus.text = "📡 GPS: $sats сп. | %.1f км/ч".format(currentSpeed)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if (resultCode == RESULT_OK) {
-                registerBluetoothReceiverIfNeeded()
-                setupListeners()
-                startDiscovery()
-            } else txtStatus.text = "BT выключен"
-        }
     }
 
     @SuppressLint("MissingPermission")

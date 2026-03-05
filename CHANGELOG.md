@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0] - 2026-03-05
+
+### Added
+- **Android**: Обновлен визуальный стиль интерфейса (градиенты, типографика, подписи блоков)
+- **Release**: Подготовлен свежий APK `CarFuelMonitor-v2.2.0-premium.apk`
+
+### Fixed
+- **Android**: Убраны deprecated вызовы `startActivityForResult` и `overridePendingTransition`
+- **Android**: Улучшена обработка Bluetooth device extra для API 33+
+
+### Changed
+- **Android**: Обновлена версия приложения до `2.2.0` (`versionCode 3`)
+
 ## [1.0.2] - 2026-03-04
 
 ### Fixed

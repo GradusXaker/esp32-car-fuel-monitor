@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.app.ActivityOptions
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -19,24 +21,29 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // Анимация появления
         val imgCar = findViewById<ImageView>(R.id.imgCar)
         val txtTitle = findViewById<TextView>(R.id.txtTitle)
         val txtSubtitle = findViewById<TextView>(R.id.txtSubtitle)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        // Анимация масштабирования
-        val scaleUp = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-        imgCar.startAnimation(scaleUp)
+        val fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        val slideIn = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left)
+        imgCar.startAnimation(fadeIn)
+        txtTitle.startAnimation(slideIn)
+        txtSubtitle.startAnimation(fadeIn)
+        progressBar.startAnimation(fadeIn)
 
-        // Переход к MainActivity
         Handler(Looper.getMainLooper()).postDelayed({
             try {
                 val intent = Intent(this@SplashActivity, MainActivity::class.java)
-                startActivity(intent)
+                val options = ActivityOptions.makeCustomAnimation(
+                    this@SplashActivity,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+                startActivity(intent, options.toBundle())
                 finish()
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             } catch (e: Exception) {
-                e.printStackTrace()
                 finish()
             }
         }, SPLASH_TIME_OUT)

@@ -1,5 +1,5 @@
 /*
- * Car Fuel Monitor - ESP32 v1.1.0
+ * Car Fuel Monitor - ESP32 v1.2.0
  * Fuel monitoring with auto-save and range calculation
  * Author: GradusXaker
  */
@@ -45,6 +45,7 @@
 #define ADC_MAX_VALUE 4095.0f
 #define SENSOR_DISCONNECT_MARGIN 250
 #define SENSOR_DISCONNECT_CONFIRM_MS 3000
+#define SHORT_PRESS_MAX_MS 800
 
 // Глобальные объекты
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -73,6 +74,13 @@ float fuelSensorVoltage = 0;
 bool fuelSensorConnected = true;
 bool allSensorsConnected = true;
 unsigned long sensorFaultStart = 0;
+bool buttonPressed = false;
+unsigned long buttonPressStart = 0;
+bool pressDidFull = false;
+bool pressDidHalf = false;
+bool pressDidEmpty = false;
+bool pressDidReset = false;
+uint8_t displayMode = 0;  // 0 = main, 1 = diagnostics
 
 void updateSensorConnectionStatus(int adcValue) {
   fuelSensorVoltage = (adcValue / ADC_MAX_VALUE) * ESP32_SUPPLY_VOLTAGE;
@@ -285,6 +293,32 @@ void drawDisplay() {
     display.display();
     return;
   }
+
+  if (displayMode == 1) {
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println("DIAGNOSTICS");
+    display.print("ADC: ");
+    display.println(lastAdcValue);
+    display.print("FuelV: ");
+    display.print(fuelSensorVoltage, 2);
+    display.println("V");
+    display.print("ESP32: ");
+    display.print(ESP32_SUPPLY_VOLTAGE, 2);
+    display.println("V");
+    display.print("Fuel: ");
+    display.println(fuelSensorConnected ? "CONNECTED" : "NO CONTACT");
+    display.print("BT: ");
+    display.println(bluetoothConnected ? "CONNECTED" : "OFF");
+    display.print("Speed: ");
+    display.print(phoneSpeed, 0);
+    display.println("km/h");
+    display.print("Up: ");
+    display.print(millis() / 60000);
+    display.println("m");
+    display.display();
+    return;
+  }
   
   display.clearDisplay();
 
@@ -358,13 +392,14 @@ void sendBluetoothData() {
   json += ",\"range_km\":" + String(rangeKm, 0);
   json += ",\"distance\":" + String(distanceTraveled, 1);
   json += ",\"total_used\":" + String(totalFuelUsed, 1);
-  json += ",\"adc\":" + String(readFuelSensor());
+  json += ",\"adc\":" + String(lastAdcValue);
   json += ",\"tank\":" + String(tankCapacity);
   json += ",\"calib_full\":" + String(calibFull);
   json += ",\"calib_empty\":" + String(calibEmpty);
   json += ",\"sensor_connected\":" + String(fuelSensorConnected ? 1 : 0);
   json += ",\"sensor_voltage\":" + String(fuelSensorVoltage, 2);
   json += ",\"esp_voltage\":" + String(ESP32_SUPPLY_VOLTAGE, 2);
+  json += ",\"display_mode\":" + String(displayMode);
   json += "}";
   SerialBT.println(json);
 }
@@ -426,75 +461,90 @@ void processBluetoothCommand(String cmd) {
 
 // Кнопка
 void checkButton() {
-  if (digitalRead(BUTTON_PIN) == LOW) {
-    if (!isCalibrating) {
-      isCalibrating = true;
-      calibrationStart = millis();
-    }
-    
-    unsigned long holdTime = millis() - calibrationStart;
-    
-    // 1 секунда - ПОЛНЫЙ БАК
-    if (holdTime >= 1000 && holdTime < 3000) {
+  bool pressedNow = (digitalRead(BUTTON_PIN) == LOW);
+
+  if (pressedNow && !buttonPressed) {
+    buttonPressed = true;
+    buttonPressStart = millis();
+    calibrationStart = buttonPressStart;
+    isCalibrating = true;
+    pressDidFull = false;
+    pressDidHalf = false;
+    pressDidEmpty = false;
+    pressDidReset = false;
+  }
+
+  if (pressedNow && buttonPressed) {
+    unsigned long holdTime = millis() - buttonPressStart;
+
+    if (holdTime >= 1000) {
       digitalWrite(LED_PIN, HIGH);
-      if (holdTime < 1100) {
-        calibFull = readFuelSensor();
-        if (calibFull <= calibEmpty + 100) {
-          calibFull = calibEmpty + 100;
-        }
-        if (calibFull > 4095) calibFull = 4095;
-        fuelLevel = 100;
-        saveToEEPROM();
-        Serial.println(F("FULL calibrated"));
+    }
+
+    if (holdTime >= 1000 && !pressDidFull) {
+      calibFull = readFuelSensor();
+      if (calibFull <= calibEmpty + 100) {
+        calibFull = calibEmpty + 100;
       }
+      if (calibFull > 4095) calibFull = 4095;
+      fuelLevel = 100;
+      saveToEEPROM();
+      Serial.println(F("FULL calibrated"));
+      pressDidFull = true;
     }
-    // 3 секунды - ПОЛ БАКА
-    else if (holdTime >= 3000 && holdTime < 5000) {
-      if (holdTime < 3100) {
-        int adcHalf = readFuelSensor();
-        calibEmpty = adcHalf - (calibFull - adcHalf);
-        if (calibEmpty < 0) calibEmpty = 0;
-        if (calibEmpty >= calibFull - 100) calibEmpty = calibFull - 100;
-        fuelLevel = 50;
-        saveToEEPROM();
-        Serial.println(F("HALF calibrated"));
+
+    if (holdTime >= 3000 && !pressDidHalf) {
+      int adcHalf = readFuelSensor();
+      calibEmpty = adcHalf - (calibFull - adcHalf);
+      if (calibEmpty < 0) calibEmpty = 0;
+      if (calibEmpty >= calibFull - 100) calibEmpty = calibFull - 100;
+      fuelLevel = 50;
+      saveToEEPROM();
+      Serial.println(F("HALF calibrated"));
+      pressDidHalf = true;
+    }
+
+    if (holdTime >= 5000 && !pressDidEmpty) {
+      calibEmpty = readFuelSensor();
+      if (calibEmpty >= calibFull - 100) {
+        calibEmpty = calibFull - 100;
       }
+      if (calibEmpty < 0) calibEmpty = 0;
+      fuelLevel = 0;
+      saveToEEPROM();
+      Serial.println(F("EMPTY calibrated"));
+      pressDidEmpty = true;
     }
-    // 5 секунд - ПУСТОЙ БАК
-    else if (holdTime >= 5000 && holdTime < 7000) {
-      if (holdTime < 5100) {
-        calibEmpty = readFuelSensor();
-        if (calibEmpty >= calibFull - 100) {
-          calibEmpty = calibFull - 100;
-        }
-        if (calibEmpty < 0) calibEmpty = 0;
-        fuelLevel = 0;
-        saveToEEPROM();
-        Serial.println(F("EMPTY calibrated"));
-      }
+
+    if (holdTime >= 7000 && !pressDidReset) {
+      calibFull = 4095;
+      calibEmpty = 0;
+      distanceTraveled = 0;
+      totalFuelUsed = 0;
+      saveToEEPROM();
+      Serial.println(F("RESET"));
+      pressDidReset = true;
     }
-    // 7 секунд - СБРОС
-    else if (holdTime >= 7000) {
-      if (holdTime < 7100) {
-        calibFull = 4095;
-        calibEmpty = 0;
-        distanceTraveled = 0;
-        totalFuelUsed = 0;
-        saveToEEPROM();
-        Serial.println(F("RESET"));
-      }
+  }
+
+  if (!pressedNow && buttonPressed) {
+    unsigned long holdTime = millis() - buttonPressStart;
+    bool didCalibration = pressDidFull || pressDidHalf || pressDidEmpty || pressDidReset;
+
+    if (!didCalibration && holdTime <= SHORT_PRESS_MAX_MS) {
+      displayMode = (displayMode == 0) ? 1 : 0;
+      Serial.println(displayMode == 0 ? F("Screen: MAIN") : F("Screen: DIAGNOSTICS"));
     }
-  } else {
-    if (isCalibrating) {
-      isCalibrating = false;
-      digitalWrite(LED_PIN, LOW);
-    }
+
+    buttonPressed = false;
+    isCalibrating = false;
+    digitalWrite(LED_PIN, LOW);
   }
 }
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("\n\nCar Fuel Monitor v1.1.0");
+  Serial.println("\n\nCar Fuel Monitor v1.2.0");
   Serial.println("========================");
   
   pinMode(FUEL_SENSOR_PIN, INPUT);
@@ -523,7 +573,7 @@ void setup() {
   
   if (displayFound) {
     display.println("Car Fuel Monitor");
-    display.println("Version 1.1.0");
+    display.println("Version 1.2.0");
     display.println("Tank: " + String(tankCapacity) + "L");
     display.println("Loading...");
     display.display();

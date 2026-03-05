@@ -41,6 +41,10 @@
 #define UPDATE_INTERVAL 1000
 #define AVG_SAMPLES 10
 #define AUTO_SAVE_INTERVAL 60000  // Сохранение каждые 60 сек
+#define ESP32_SUPPLY_VOLTAGE 3.30f
+#define ADC_MAX_VALUE 4095.0f
+#define SENSOR_DISCONNECT_MARGIN 250
+#define SENSOR_DISCONNECT_CONFIRM_MS 3000
 
 // Глобальные объекты
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -64,6 +68,37 @@ unsigned long lastUpdate = 0;
 bool bluetoothConnected = false;
 bool displayFound = false;
 float phoneSpeed = 0;
+int lastAdcValue = 0;
+float fuelSensorVoltage = 0;
+bool fuelSensorConnected = true;
+bool allSensorsConnected = true;
+unsigned long sensorFaultStart = 0;
+
+void updateSensorConnectionStatus(int adcValue) {
+  fuelSensorVoltage = (adcValue / ADC_MAX_VALUE) * ESP32_SUPPLY_VOLTAGE;
+
+  int lowLimit = max(0, calibEmpty - SENSOR_DISCONNECT_MARGIN);
+  int highLimit = min(4095, calibFull + SENSOR_DISCONNECT_MARGIN);
+  bool outOfRange = adcValue < lowLimit || adcValue > highLimit;
+
+  if (outOfRange) {
+    if (sensorFaultStart == 0) sensorFaultStart = millis();
+    if (millis() - sensorFaultStart >= SENSOR_DISCONNECT_CONFIRM_MS) {
+      fuelSensorConnected = false;
+    }
+  } else {
+    sensorFaultStart = 0;
+    fuelSensorConnected = true;
+  }
+
+  allSensorsConnected = fuelSensorConnected;
+
+  static bool lastState = true;
+  if (lastState != fuelSensorConnected) {
+    Serial.println(fuelSensorConnected ? F("Sensors: OK") : F("Fuel sensor: DISCONNECTED"));
+    lastState = fuelSensorConnected;
+  }
+}
 
 // Чтение калибровки из EEPROM
 void loadFromEEPROM() {
@@ -155,6 +190,14 @@ void calculateRange() {
 // Обновление данных
 void updateFuelData() {
   int adcValue = readFuelSensor();
+  lastAdcValue = adcValue;
+  updateSensorConnectionStatus(adcValue);
+
+  if (!fuelSensorConnected) {
+    Serial.printf("ADC: %d | Fuel sensor disconnected\n", adcValue);
+    return;
+  }
+
   float lastFuelLevel = fuelLevel;
   fuelLevel = calculateFuelLevel(adcValue);
   
@@ -244,6 +287,21 @@ void drawDisplay() {
   }
   
   display.clearDisplay();
+
+  if (!fuelSensorConnected) {
+    display.setCursor(0, 0);
+    display.println("FUEL SENSOR");
+    display.println("DISCONNECTED");
+    display.print("ADC: ");
+    display.println(lastAdcValue);
+    display.print("ESP32: ");
+    display.print(ESP32_SUPPLY_VOLTAGE, 2);
+    display.println("V");
+    display.print("BT: ");
+    display.println(bluetoothConnected ? "ON" : "OFF");
+    display.display();
+    return;
+  }
   
   // Строка 1: Bluetooth и время работы
   if (bluetoothConnected) {
@@ -251,11 +309,12 @@ void drawDisplay() {
     display.print("BT");
   }
   display.setCursor(20, 0);
-  display.print(millis() / 60000);
-  display.print("m");
+  display.print("ESP:");
+  display.print(ESP32_SUPPLY_VOLTAGE, 1);
+  display.print("V");
   
   // Строка 2: Уровень топлива
-  display.setCursor(60, 0);
+  display.setCursor(88, 0);
   display.print((int)fuelLevel);
   display.print("%");
   
@@ -281,9 +340,8 @@ void drawDisplay() {
   display.print("L/100km");
   
   display.setCursor(0, 52);
-  display.print("Dist: ");
-  display.print(distanceTraveled, 0);
-  display.print("km");
+  display.print("Sensors: ");
+  display.print(allSensorsConnected ? "OK" : "CHECK");
   
   display.display();
 }
@@ -304,6 +362,9 @@ void sendBluetoothData() {
   json += ",\"tank\":" + String(tankCapacity);
   json += ",\"calib_full\":" + String(calibFull);
   json += ",\"calib_empty\":" + String(calibEmpty);
+  json += ",\"sensor_connected\":" + String(fuelSensorConnected ? 1 : 0);
+  json += ",\"sensor_voltage\":" + String(fuelSensorVoltage, 2);
+  json += ",\"esp_voltage\":" + String(ESP32_SUPPLY_VOLTAGE, 2);
   json += "}";
   SerialBT.println(json);
 }

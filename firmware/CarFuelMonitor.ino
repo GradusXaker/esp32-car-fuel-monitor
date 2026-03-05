@@ -27,13 +27,13 @@
 // EEPROM адреса
 #define EEPROM_SIZE 512
 #define EEPROM_CALIB_FULL 0
-#define EEPROM_CALIB_EMPTY 2
-#define EEPROM_TANK_CAPACITY 4
-#define EEPROM_FUEL_LEVEL 8
-#define EEPROM_DISTANCE 12
-#define EEPROM_TOTAL_USED 16
-#define EEPROM_LAST_SAVE 20
-#define EEPROM_MAGIC 24
+#define EEPROM_CALIB_EMPTY 4
+#define EEPROM_TANK_CAPACITY 8
+#define EEPROM_FUEL_LEVEL 12
+#define EEPROM_DISTANCE 16
+#define EEPROM_TOTAL_USED 20
+#define EEPROM_LAST_SAVE 24
+#define EEPROM_MAGIC 28
 
 #define EEPROM_MAGIC_VALUE 0x42
 
@@ -63,6 +63,7 @@ unsigned long calibrationStart = 0;
 unsigned long lastUpdate = 0;
 bool bluetoothConnected = false;
 bool displayFound = false;
+float phoneSpeed = 0;
 
 // Чтение калибровки из EEPROM
 void loadFromEEPROM() {
@@ -187,16 +188,24 @@ void updateFuelData() {
 
 // Расчет расхода
 void calculateConsumption() {
-  // Симуляция расстояния (для тестов)
-  static unsigned long simCounter = 0;
-  simCounter++;
-  if (simCounter >= 60) {
-    distanceTraveled += 1.0;
-    simCounter = 0;
-    
-    // Сохранение каждые 10 км
-    if ((int)distanceTraveled % 10 == 0) {
+  // Реальный пробег по скорости с телефона (км/ч)
+  static unsigned long lastDistanceCalc = 0;
+  if (lastDistanceCalc == 0) {
+    lastDistanceCalc = millis();
+  }
+
+  unsigned long now = millis();
+  float hours = (now - lastDistanceCalc) / 3600000.0;
+  lastDistanceCalc = now;
+
+  if (phoneSpeed > 0 && phoneSpeed < 300) {
+    distanceTraveled += phoneSpeed * hours;
+
+    // Сохранение примерно каждые 10 км
+    static int lastSavedKm = 0;
+    if (((int)distanceTraveled - lastSavedKm) >= 10) {
       saveToEEPROM();
+      lastSavedKm = (int)distanceTraveled;
     }
   }
   
@@ -308,20 +317,29 @@ void processBluetoothCommand(String cmd) {
   }
   else if (cmd == "SET_FULL") {
     calibFull = readFuelSensor();
+    if (calibFull <= calibEmpty + 100) {
+      calibFull = calibEmpty + 100;
+    }
+    if (calibFull > 4095) calibFull = 4095;
     fuelLevel = 100;
     saveToEEPROM();
     SerialBT.println("OK: Full=" + String(calibFull));
   }
   else if (cmd == "SET_HALF") {
     int adcHalf = readFuelSensor();
-    // Среднее между empty и full
     calibEmpty = adcHalf - (calibFull - adcHalf);
+    if (calibEmpty < 0) calibEmpty = 0;
+    if (calibEmpty >= calibFull - 100) calibEmpty = calibFull - 100;
     fuelLevel = 50;
     saveToEEPROM();
     SerialBT.println("OK: Half calibrated");
   }
   else if (cmd == "SET_EMPTY") {
     calibEmpty = readFuelSensor();
+    if (calibEmpty >= calibFull - 100) {
+      calibEmpty = calibFull - 100;
+    }
+    if (calibEmpty < 0) calibEmpty = 0;
     fuelLevel = 0;
     saveToEEPROM();
     SerialBT.println("OK: Empty=" + String(calibEmpty));
@@ -360,6 +378,10 @@ void checkButton() {
       digitalWrite(LED_PIN, HIGH);
       if (holdTime < 1100) {
         calibFull = readFuelSensor();
+        if (calibFull <= calibEmpty + 100) {
+          calibFull = calibEmpty + 100;
+        }
+        if (calibFull > 4095) calibFull = 4095;
         fuelLevel = 100;
         saveToEEPROM();
         Serial.println(F("FULL calibrated"));
@@ -370,6 +392,8 @@ void checkButton() {
       if (holdTime < 3100) {
         int adcHalf = readFuelSensor();
         calibEmpty = adcHalf - (calibFull - adcHalf);
+        if (calibEmpty < 0) calibEmpty = 0;
+        if (calibEmpty >= calibFull - 100) calibEmpty = calibFull - 100;
         fuelLevel = 50;
         saveToEEPROM();
         Serial.println(F("HALF calibrated"));
@@ -379,6 +403,10 @@ void checkButton() {
     else if (holdTime >= 5000 && holdTime < 7000) {
       if (holdTime < 5100) {
         calibEmpty = readFuelSensor();
+        if (calibEmpty >= calibFull - 100) {
+          calibEmpty = calibFull - 100;
+        }
+        if (calibEmpty < 0) calibEmpty = 0;
         fuelLevel = 0;
         saveToEEPROM();
         Serial.println(F("EMPTY calibrated"));
@@ -479,12 +507,11 @@ void loop() {
   delay(10);
 }
 
-// Обработка скорости от телефона
-float phoneSpeed = 0;
-
 void processSpeedCommand(String cmd) {
   if (cmd.startsWith("SPEED:")) {
     phoneSpeed = cmd.substring(6).toFloat();
+    if (phoneSpeed < 0) phoneSpeed = 0;
+    if (phoneSpeed > 300) phoneSpeed = 300;
     Serial.println("Phone speed: " + String(phoneSpeed) + " km/h");
   }
 }

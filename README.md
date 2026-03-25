@@ -1,4 +1,6 @@
 <div align="center">
+  <img src="./banner.svg" alt="esp32-car-fuel-monitor banner" width="100%" />
+
   <h1>esp32-car-fuel-monitor</h1>
   <p><strong>Кибер-датчик топлива на ESP32.</strong> OLED, Bluetooth и Android-приложение для мониторинга автомобиля в реальном времени.</p>
 

@@ -1,9 +1,24 @@
-# Car Fuel Monitor - ESP32
+<div align="center">
+  <h1>esp32-car-fuel-monitor</h1>
+  <p><strong>Кибер-датчик топлива на ESP32.</strong> OLED, Bluetooth и Android-приложение для мониторинга автомобиля в реальном времени.</p>
 
-Мониторинг расхода топлива автомобиля с OLED дисплеем и Bluetooth приложением для Android.
+  <p>
+    <img src="https://img.shields.io/badge/ESP32-monitor-111827?style=for-the-badge&logo=espressif&logoColor=22C55E" alt="ESP32" />
+    <img src="https://img.shields.io/badge/OLED-SSD1306-111827?style=for-the-badge&logoColor=22C55E" alt="OLED" />
+    <img src="https://img.shields.io/badge/Bluetooth-Android-111827?style=for-the-badge&logo=bluetooth&logoColor=22C55E" alt="Bluetooth Android" />
+    <img src="https://img.shields.io/badge/license-GPLv3-22C55E?style=for-the-badge&labelColor=0B1220" alt="License" />
+  </p>
+</div>
 
-![Version](https://img.shields.io/badge/version-2.2.0-blue)
-![License](https://img.shields.io/badge/license-GPLv3-green)
+```text
+> device: car-fuel-monitor
+> mode: telemetry + calibration + mobile app
+> status: buildable / configurable / expandable
+```
+
+## обзор
+
+Проект показывает уровень топлива на `ESP32` с `OLED`-дисплеем, умеет передавать данные по `Bluetooth` и дополняется Android-приложением для калибровки и визуализации.
 
 ## 📋 Содержание
 

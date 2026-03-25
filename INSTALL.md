@@ -1,5 +1,12 @@
 # Инструкция по установке
 
+```text
+> repo: esp32-car-fuel-monitor
+> doc: INSTALL
+> purpose: Установка прошивки, Android-приложения и настройка компонентов
+```
+
+
 ## 🔧 Прошивка ESP32
 
 ### 1. Установка Arduino IDE

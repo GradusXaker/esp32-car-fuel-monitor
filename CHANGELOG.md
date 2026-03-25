@@ -1,21 +1,28 @@
-# Changelog
+# История изменений
+
+```text
+> repo: esp32-car-fuel-monitor
+> doc: CHANGELOG
+> purpose: История изменений прошивки и Android-приложения
+```
+
 
 ## [2.2.0] - 2026-03-05
 
-### Added
+### Добавлено
 - **Android**: Обновлен визуальный стиль интерфейса (градиенты, типографика, подписи блоков)
 - **Release**: Подготовлен свежий APK `CarFuelMonitor-v2.2.0-premium.apk`
 
-### Fixed
+### Исправлено
 - **Android**: Убраны deprecated вызовы `startActivityForResult` и `overridePendingTransition`
 - **Android**: Улучшена обработка Bluetooth device extra для API 33+
 
-### Changed
+### Изменено
 - **Android**: Обновлена версия приложения до `2.2.0` (`versionCode 3`)
 
 ## [1.0.2] - 2026-03-04
 
-### Fixed
+### Исправлено
 - **Android**: Исправлен краш приложения при запуске
 - **Android**: Добавлена обработка null для BluetoothAdapter
 - **Android**: Добавлены try-catch блоки во все методы
@@ -23,20 +30,20 @@
 - **ESP32**: Добавлена переменная displayFound для проверки дисплея
 - **ESP32**: Явная инициализация Wire.begin(21, 22)
 
-### Changed
+### Изменено
 - **Android**: Улучшена обработка ошибок
 - **Android**: Добавлена защита от NullPointerException
 - **ESP32**: Прошивка работает без OLED дисплея
 
 ## [1.0.1] - 2026-03-04
 
-### Fixed
+### Исправлено
 - Исправлена инициализация OLED дисплея
 - Добавлена проверка наличия дисплея
 
 ## [1.0.0] - 2026-03-04
 
-### Added
+### Добавлено
 - Первый релиз
 - ESP32 прошивка с OLED и Bluetooth
 - Android приложение на Kotlin
